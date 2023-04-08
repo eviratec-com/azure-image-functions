@@ -6,5 +6,11 @@ module.exports = async function (imageUrl, width) {
   const image = await Jimp.read(imageUrl);
 
   // Resize the image to input width and auto height.
-  return Readable.from(await image.resize(width, jimp.AUTO).getBufferAsync('image/jpeg'));
+  const resize = await image.resize(width, Jimp.AUTO)
+
+  // Get the resulting image as a buffer
+  const buffer = await image.getBufferAsync(Jimp.AUTO);
+
+  // Return the buffer
+  return buffer;
 }
