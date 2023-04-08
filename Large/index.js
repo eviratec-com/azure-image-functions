@@ -1,3 +1,8 @@
+const streamOutputToFile = require('../src/streamOutputToFile');
+const resizeImage = require('../src/resizeImage');
+
+const containerName = process.env.LARGE_BLOB_CONTAINER_NAME;
+
 module.exports = async function (context, myQueueItem) {
     context.log('JavaScript queue trigger function processed work item', myQueueItem);
 
@@ -16,4 +21,16 @@ module.exports = async function (context, myQueueItem) {
       `User: ${user} | Year: ${year} | Month: ${month} | Day: ${day} | `
       + `Filename: ${filename} | Extension: ${extension}`
     );
+
+    try {
+      await streamOutputToFile(
+        resizeImage(blobItemUrl, 1600),
+        containerName,
+        `${user}/${year}/${month}/${day}/${filename}.${extension}`
+      );
+    }
+    catch (e) {
+      context.log(e.message);
+      context.log(e);
+    }
 };
