@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "myQueueItem",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "medium-resize-queue",
+      "connection": "AZURE_STORAGE_CONNECTION_STRING"
+    }
+  ]
+}
