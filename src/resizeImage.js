@@ -12,5 +12,16 @@ module.exports = async function (imageUrl, width) {
   const buffer = await image.getBufferAsync(Jimp.AUTO);
 
   // Return the buffer
-  return buffer;
+  return bufferToStream(buffer);
+}
+
+function bufferToStream(binary) {
+  const readableInstanceStream = new Readable({
+    read() {
+      this.push(binary);
+      this.push(null);
+    }
+  });
+
+  return readableInstanceStream;
 }

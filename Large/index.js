@@ -19,15 +19,18 @@ module.exports = async function (context, myQueueItem) {
 
     context.log(
       `User: ${user} | Year: ${year} | Month: ${month} | Day: ${day} | `
-      + `Filename: ${filename} | Extension: ${extension}`
+      + `Filename: ${filename} | Extension: ${extension} | BlobItemUrl: ${blobItemUrl}`
     );
 
     try {
-      await streamOutputToFile(
-        resizeImage(blobItemUrl, 1600),
+      const buff = await resizeImage(blobItemUrl, 1600);
+      context.log(buff);
+      const result = await streamOutputToFile(
+        buff,
         containerName,
         `${user}/${year}/${month}/${day}/${filename}.${extension}`
       );
+      context.log(result);
     }
     catch (e) {
       context.log(e.message);
