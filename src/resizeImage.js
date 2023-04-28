@@ -1,17 +1,12 @@
 const { Readable } = require('node:stream');
-const Jimp = require('jimp');
+
+const resizeImageBuff = require('./resizeImageBuff');
 
 module.exports = async function (imageUrl, width) {
-  // Read the image.
-  const image = await Jimp.read(imageUrl);
+  // Fetch, rotate, and resize image, returning as a buffer
+  const buffer = await resizeImageBuff(imageUrl, width);
 
-  // Resize the image to input width and auto height.
-  const resize = await image.resize(width, Jimp.AUTO)
-
-  // Get the resulting image as a buffer
-  const buffer = await image.getBufferAsync(Jimp.AUTO);
-
-  // Return the buffer
+  // Return the buffer as a stream
   return bufferToStream(buffer);
 }
 
