@@ -9,32 +9,22 @@ module.exports = async function (context, myQueueItem) {
     const blobItemUrl = myQueueItem.data.blobUrl;
     const [
       blobItemPath,
+      site,
       user,
       year,
       month,
       day,
       filename,
       extension
-    ] = blobItemUrl.match(/([0-9]{7,})\/([0-9]{4})\/([0-9]{1,2})\/([0-9]{1,2})\/(.+)\.([a-z]{3,})$/);
-
-    // context.log(
-    //   `User: ${user} | Year: ${year} | Month: ${month} | Day: ${day} | `
-    //   + `Filename: ${filename} | Extension: ${extension} | BlobItemUrl: ${blobItemUrl}`
-    // );
+    ] = blobItemUrl.match(/([a-z0-9]{3,})\/([0-9]{7,})\/([0-9]{4})\/([0-9]{1,2})\/([0-9]{1,2})\/(.+)\.([a-z]{3,})$/);
 
     try {
       const buff = await resizeImage(blobItemUrl, 800);
-      // context.log('resizeImage result:');
-      // context.log(buff);
-      // context.log(containerName);
-      // context.log(`${user}/${year}/${month}/${day}/${filename}.${extension}`);
       const result = await streamOutputToFile(
         buff,
         containerName,
-        `${user}/${year}/${month}/${day}/${filename}.${extension}`
+        `${site}/${user}/${year}/${month}/${day}/${filename}.${extension}`
       );
-      // context.log('streamOutputToFileResult result:');
-      // context.log(result);
     }
     catch (e) {
       context.log(e.message);

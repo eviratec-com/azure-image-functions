@@ -9,13 +9,14 @@ module.exports = async function (context, myQueueItem) {
     const blobItemUrl = myQueueItem.data.blobUrl;
     const [
       blobItemPath,
+      site,
       user,
       year,
       month,
       day,
       filename,
       extension
-    ] = blobItemUrl.match(/([0-9]{7,})\/([0-9]{4})\/([0-9]{1,2})\/([0-9]{1,2})\/(.+)\.([a-z]{3,})$/);
+    ] = blobItemUrl.match(/([a-z0-9]{3,})\/([0-9]{7,})\/([0-9]{4})\/([0-9]{1,2})\/([0-9]{1,2})\/(.+)\.([a-z]{3,})$/);
 
     // context.log(
     //   `User: ${user} | Year: ${year} | Month: ${month} | Day: ${day} | `
@@ -31,7 +32,7 @@ module.exports = async function (context, myQueueItem) {
       const result = await streamOutputToFile(
         buff,
         containerName,
-        `${user}/${year}/${month}/${day}/${filename}.${extension}`
+        `${site}/${user}/${year}/${month}/${day}/${filename}.${extension}`
       );
       // context.log('streamOutputToFileResult result:');
       // context.log(result);
